@@ -1,9 +1,10 @@
 import sys
+import time
 
 def main():
    """
    Program to enumerate all fixed polyominos of order n.
-   Revision 3. 
+   Revision 4. 
    """
 
    # Read n from command line.  Display usage and exit on illegal input. 
@@ -14,13 +15,17 @@ def main():
    if n < 1:
       usage()
 
+   # Mark start time
+   start = time.time()
+
    # Copy normalized polyominos into a set to eliminate duplicates. 
-   polyomino_set = set()
-   for polyomino in polyominos(n):
-      polyomino_set.add(normalize(polyomino))
+   polyomino_set = {normalize(p) for p in polyominos(n)}
 
    # Convert set to a list, and sort in canonical order. 
    result = sorted(list(polyomino_set))
+
+   # Measure elapsed time
+   elapsed_time = time.time() - start
 
    # Print results.
    line = 1
@@ -34,6 +39,7 @@ def main():
       line += 1
 
    print(f"\tnumber of {prefix(n)}ominos = {len(result)}")
+   print(f"\telapsed time = {elapsed_time:.3} seconds")
 
 def usage():
    print(f"usage: python {sys.argv[0]} polyomino-order")
@@ -51,9 +57,10 @@ def prefix(n):
 
 def polyominos(n):
    """
-   Wrapper for polyomino generator
+   Helper function to kick off polyomino generator with single cell seed
    """
-   yield from polyominos_recursive(n, {(0, 0)} )
+   seed_poly = {(0, 0)}   # any pair works
+   yield from polyominos_recursive(n, seed_poly )
 
 def polyominos_recursive(n, poly):
    """
