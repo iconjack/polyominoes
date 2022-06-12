@@ -4,10 +4,10 @@ import time
 def main():
    """
    Program to enumerate all fixed polyominos of order n.
-   Revision 4. 
+   Revision 5.
    """
 
-   # Read n from command line.  Display usage and exit on illegal input. 
+   # Read n from command line.  On illegal input, display usage and exit.
    try:
       n = int(sys.argv[1])
    except:
@@ -16,7 +16,7 @@ def main():
       usage()
 
    # Mark start time
-   start = time.time()
+   start_time = time.time()
 
    # Copy normalized polyominos into a set to eliminate duplicates. 
    polyomino_set = {normalize(p) for p in polyominos(n)}
@@ -24,8 +24,9 @@ def main():
    # Convert set to a list, and sort in canonical order. 
    result = sorted(list(polyomino_set))
 
-   # Measure elapsed time
-   elapsed_time = time.time() - start
+   # Mark stop time and measure elapsed time
+   stop_time = time.time()
+   elapsed_time = time.time() - start_time
 
    # Print results.
    line = 1
@@ -39,27 +40,30 @@ def main():
       line += 1
 
    print(f"\tnumber of {prefix(n)}ominos = {len(result)}")
-   print(f"\telapsed time = {elapsed_time:.3} seconds")
+   print(f"\telapsed time = {elapsed_time:0.3f} seconds")
 
 def usage():
+   """
+   Display usage message and exit.
+   """
    print(f"usage: python {sys.argv[0]} polyomino-order")
    sys.exit("")
    
 def prefix(n):
    """
-   Function to provide "omino" names
+   Function to provide polyomino name prefixes
    """
-   if n <= 12:
-      pre = ["0-", "mon", "d", "tri", "tetr", "pent", "hex", "hept", "oct", "non", "dec", "undec", "dodec"][n]
-   else:
+   try:
+      pre = ["poly", "mon", "d", "tri", "tetr", "pent", "hex", "hept", "oct", "non", "dec", "undec", "dodec"][n]
+   except:
       pre = f"{n}-"
    return pre
 
 def polyominos(n):
    """
-   Helper function to kick off polyomino generator with single cell seed
+   Helper generator to kick off polyomino generator with single cell seed
    """
-   seed_poly = {(0, 0)}   # any pair works
+   seed_poly = {(0,0)}
    yield from polyominos_recursive(n, seed_poly )
 
 def polyominos_recursive(n, poly):
@@ -72,10 +76,8 @@ def polyominos_recursive(n, poly):
       puffy = poly.copy()
       for cell in list(poly):
          x, y = cell
-         puffy.add((x+1, y))
-         puffy.add((x-1, y))
-         puffy.add((x, y+1))
-         puffy.add((x, y-1))
+         puffy.update([(x+1,y), (x-1,y), (x, y+1), (x,y-1)])
+
       hull = puffy - poly
       for cell in list(hull):
          new_poly = poly.copy()
