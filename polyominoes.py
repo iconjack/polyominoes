@@ -4,7 +4,7 @@ import time
 def main():
    """
    Program to enumerate all fixed polyominos of order n.
-   Revision 5.
+   Revision 6.
    """
 
    # Read n from command line.  On illegal input, display usage and exit.
@@ -19,7 +19,7 @@ def main():
    start_time = time.time()
 
    # Copy normalized polyominos into a set to eliminate duplicates. 
-   polyomino_set = {normalize(p) for p in polyominos(n)}
+   polyomino_set = {normalized(p) for p in polyominos(n)}
 
    # Convert set to a list, and sort in canonical order. 
    result = sorted(list(polyomino_set))
@@ -34,9 +34,9 @@ def main():
    print(f"Results:")
    for poly in result:
       print(f"{line:7}\t{list(poly)}")
-      print(f"")
+      print()
       graph(poly)
-      print(f"")
+      print()
       line += 1
 
    print(f"\tnumber of {prefix(n)}ominos = {len(result)}")
@@ -61,7 +61,7 @@ def prefix(n):
 
 def polyominos(n):
    """
-   Helper generator to kick off polyomino generator with single cell seed
+   Helper generator to kick off recursive generator with single cell seed
    """
    seed_poly = {(0,0)}
    yield from polyominos_recursive(n, seed_poly )
@@ -84,7 +84,7 @@ def polyominos_recursive(n, poly):
          new_poly.add(cell)
          yield from polyominos_recursive(n-1, new_poly)
 
-def normalize(polyomino):
+def normalized(polyomino):
    """
    Normalization function to position polyomino in the upper-left-hand-most
    position in row, column space.  Within the polyomino, cells are forced 
@@ -92,19 +92,10 @@ def normalize(polyomino):
    Returns a tuple of (row, column) pairs for ease of use in a set. 
    """
    n = len(polyomino)
-   xmin, ymin = n, n
-   for cell in polyomino:
-      x, y = cell
-      xmin = min(x, xmin)
-      ymin = min(y, ymin)
+   xmin = min(x for (x, y) in polyomino)
+   ymin = min(y for (x, y) in polyomino)
 
-   new_polyomino = []
-   for cell in polyomino:
-      x, y = cell
-      xnorm, ynorm = x - xmin, y - ymin
-      new_cell = (xnorm, ynorm)
-      new_polyomino.append(new_cell)
-
+   new_polyomino = [(x-xmin, y-ymin) for (x, y) in polyomino]
    new_polyomino.sort(key = lambda x:n*x[0]+x[1])
    return tuple(new_polyomino)
 
@@ -112,14 +103,14 @@ def graph(poly):
    """
    Prints a text representation of polyomino. 
    """
-   n_rows = max([row for (row, col) in poly]) + 1
-   n_cols = max([col for (row, col) in poly]) + 1
+   n_rows = max(row for (row, col) in poly) + 1
+   n_cols = max(col for (row, col) in poly) + 1
    for row in range(n_rows):
       print(f"\t", end="")
       for col in range(n_cols):
          cell = (row, col)
          graphic = "#" if cell in poly else " "
          print(f"{graphic} ", end="")
-      print(f"")
+      print()
 
 main()
