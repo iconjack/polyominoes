@@ -4,7 +4,7 @@ import time
 def main():
    """
    Program to enumerate all fixed polyominos of order n.
-   Revision 6.
+   Revision 7.
    """
 
    # Read n from command line.  On illegal input, display usage and exit.
@@ -74,10 +74,7 @@ def polyominos_recursive(n, poly):
       yield poly
    else:
       puffy = poly.copy()
-      for cell in list(poly):
-         x, y = cell
-         puffy.update([(x+1,y), (x-1,y), (x, y+1), (x,y-1)])
-
+      puffy.update(*[[(x+1,y), (x-1,y), (x, y+1), (x,y-1)] for (x, y) in poly])
       hull = puffy - poly
       for cell in list(hull):
          new_poly = poly.copy()
