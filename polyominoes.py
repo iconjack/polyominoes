@@ -110,4 +110,5 @@ def graph(poly):
          print(f"{graphic} ", end="")
       print()
 
-main()
+if __name__ == "__main__":
+   main()
