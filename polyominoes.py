@@ -1,19 +1,16 @@
 import sys
 import time
+import argparse
 
 def main():
    """
    Program to enumerate all fixed polyominos of order n.
    Revision 7.
    """
-
-   # Read n from command line.  On illegal input, display usage and exit.
-   try:
-      n = int(sys.argv[1])
-   except:
-      usage()
-   if n < 1:
-      usage()
+   parser = argparse.ArgumentParser(description="Enumerate all fixed polyominoes or order n.")
+   parser.add_argument('n', type=int, help="number of live cells")
+   args = parser.parse_args()
+   n = args.n
 
    # Mark start time
    start_time = time.time()
@@ -42,13 +39,6 @@ def main():
    print(f"\tnumber of {prefix(n)}ominos = {len(result)}")
    print(f"\telapsed time = {elapsed_time:0.3f} seconds")
 
-def usage():
-   """
-   Display usage message and exit.
-   """
-   print(f"usage: python {sys.argv[0]} polyomino-order")
-   sys.exit("")
-   
 def prefix(n):
    """
    Function to provide polyomino name prefixes
@@ -110,4 +100,5 @@ def graph(poly):
          print(f"{graphic} ", end="")
       print()
 
-main()
+if __name__ == "__main__":
+   main()
