@@ -7,7 +7,9 @@ def main():
    Program to enumerate all fixed polyominos of order n.
    Revision 7.
    """
-   parser = argparse.ArgumentParser(description="Enumerate all fixed polyominoes or order n.")
+   parser = argparse.ArgumentParser(
+      description="Enumerate all fixed polyominoes or order n.",
+      allow_abbrev=False)
    parser.add_argument('n', type=int, help="number of live cells")
    args = parser.parse_args()
    n = args.n
