@@ -11,6 +11,12 @@ def main():
       description="Enumerate all fixed polyominoes or order n.",
       allow_abbrev=False)
    parser.add_argument('n', type=int, help="number of live cells")
+   parser.add_argument('-d', '--display', dest='display', action='store_true',
+      help="display generated polyominoes")
+   parser.add_argument('-t', '--time', dest='timing', action='store_true',
+      help="time the run")
+   parser.set_defaults(display=False, timing=False)
+
    args = parser.parse_args()
    n = args.n
 
@@ -27,19 +33,21 @@ def main():
    stop_time = time.time()
    elapsed_time = time.time() - start_time
 
-   # Print results.
-   line = 1
-   print(f"")
-   print(f"Results:")
-   for poly in result:
-      print(f"{line:7}\t{list(poly)}")
-      print()
-      graph(poly)
-      print()
-      line += 1
+   if args.display:
+      # Print results.
+      line = 1
+      print(f"")
+      print(f"Results:")
+      for poly in result:
+         print(f"{line:7}\t{list(poly)}")
+         print()
+         graph(poly)
+         print()
+         line += 1
 
    print(f"\tnumber of {prefix(n)}ominos = {len(result)}")
-   print(f"\telapsed time = {elapsed_time:0.3f} seconds")
+   if args.timing:
+      print(f"\telapsed time = {elapsed_time:0.3f} seconds")
 
 def prefix(n):
    """
