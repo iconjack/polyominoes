@@ -23,7 +23,7 @@ def main():
 
    # Mark stop time and measure elapsed time
    stop_time = time.time()
-   elapsed_time = time.time() - start_time
+   elapsed_time = stop_time - start_time
 
    # Print results.
    line = 1
