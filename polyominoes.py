@@ -4,7 +4,7 @@ import argparse
 
 def main():
    """
-   Program to enumerate all fixed polyominos of order n.
+   Program to enumerate all fixed polyominoes of order n.
    Revision 7.
    """
    parser = argparse.ArgumentParser(
@@ -23,8 +23,8 @@ def main():
    # Mark start time
    start_time = time.time()
 
-   # Copy normalized polyominos into a set to eliminate duplicates. 
-   polyomino_set = {normalized(p) for p in polyominos(n)}
+   # Copy normalized polyominoes into a set to eliminate duplicates. 
+   polyomino_set = {normalized(p) for p in polyominoes(n)}
 
    # Convert set to a list, and sort in canonical order. 
    result = sorted(list(polyomino_set))
@@ -59,16 +59,16 @@ def prefix(n):
       pre = f"{n}-"
    return pre
 
-def polyominos(n):
+def polyominoes(n):
    """
    Helper generator to kick off recursive generator with single cell seed
    """
    seed_poly = {(0,0)}
-   yield from polyominos_recursive(n, seed_poly )
+   yield from polyominoes_recursive(n, seed_poly )
 
-def polyominos_recursive(n, poly):
+def polyominoes_recursive(n, poly):
    """
-   Recursive generator of polyominos of order n.
+   Recursive generator of polyominoes of order n.
    """
    if n == 1: 
       yield poly
@@ -79,13 +79,13 @@ def polyominos_recursive(n, poly):
       for cell in list(hull):
          new_poly = poly.copy()
          new_poly.add(cell)
-         yield from polyominos_recursive(n-1, new_poly)
+         yield from polyominoes_recursive(n-1, new_poly)
 
 def normalized(polyomino):
    """
    Normalization function to position polyomino in the upper-left-hand-most
    position in row, column space.  Within the polyomino, cells are forced 
-   into a canonical order for ease of comparison with other polyominos. 
+   into a canonical order for ease of comparison with other polyominoes. 
    Returns a tuple of (row, column) pairs for ease of use in a set. 
    """
    n = len(polyomino)
